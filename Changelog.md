@@ -20,6 +20,7 @@ Breaking Changes:
  * Type System: Declarations with the name ``this``, ``super`` and ``_`` are disallowed, with the exception of public functions and events.
  * Type System: Disallow ``type(super)``.
  * Type System: Disallow ``msg.data`` in ``receive()`` function.
+ * Type System: Support ``address(...).codehash`` to retrieve the code hash of an account.
  * Command Line Interface: JSON fields `abi`, `devdoc`, `userdoc` and `storage-layout` are now sub-objects rather than strings.
  * Scanner: Remove support for the ``\b``, ``\f``, and ``\v`` escape sequences.
 
@@ -159,7 +160,6 @@ Bugfixes:
 
 Important Bugfixes:
  * Type Checker: Disallow two or more free functions with identical name (potentially imported and aliased) and parameter types.
-
 
 Compiler Features:
  * Export compiler-generated utility sources via standard-json or combined-json.
