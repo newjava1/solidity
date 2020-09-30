@@ -85,6 +85,8 @@ private:
 
 	wasm::FunctionDefinition translateFunction(yul::FunctionDefinition const& _funDef);
 
+	void importBuiltIn(BuiltinFunction const* _builtin, std::string const& _module, std::string const& _name);
+
 	std::string newLabel();
 	/// Selects a subset of global variables matching specified sequence of variable types.
 	/// Defines more global variables of a given type if there's not enough.
