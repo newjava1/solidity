@@ -43,6 +43,7 @@
 #include <libyul/optimiser/ForLoopConditionIntoBody.h>
 #include <libyul/optimiser/ForLoopConditionOutOfBody.h>
 #include <libyul/optimiser/ForLoopInitRewriter.h>
+#include <libyul/optimiser/FunctionSpecializer.h>
 #include <libyul/optimiser/LoadResolver.h>
 #include <libyul/optimiser/LoopInvariantCodeMotion.h>
 #include <libyul/optimiser/MainFunction.h>
@@ -206,6 +207,12 @@ TestCase::TestResult YulOptimizerTest::run(ostream& _stream, string const& _line
 	{
 		disambiguate();
 		FunctionHoister::run(*m_context, *m_object->code);
+	}
+	else if (m_optimizerStep == "functionSpecializer")
+	{
+		disambiguate();
+		FunctionHoister::run(*m_context, *m_object->code);
+		FunctionSpecializer::run(*m_context, *m_object->code);
 	}
 	else if (m_optimizerStep == "expressionInliner")
 	{
