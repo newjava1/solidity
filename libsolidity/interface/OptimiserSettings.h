@@ -45,7 +45,7 @@ struct OptimiserSettings
 			"xarulrul"                 // Prune a bit more in SSA
 			"xarrcL"                   // Turn into SSA again and simplify
 			"gvif"                     // Run full inliner
-			"CTUcarrLsTOtfDncarrIulc"  // SSA plus simplify
+			"CTUcarrLsTFOtfDncarrIulc" // SSA plus simplify
 		"]"
 		"jmuljuljul VcTOcul jmulN";     // Make source short and pretty
 
