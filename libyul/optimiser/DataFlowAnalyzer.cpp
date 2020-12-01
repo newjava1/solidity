@@ -62,26 +62,26 @@ void DataFlowAnalyzer::operator()(ExpressionStatement& _statement)
 	if (auto vars = isSimpleStore(StoreLoadLocation::Storage, _statement))
 	{
 		ASTModifier::operator()(_statement);
-		set<YulString> keysToErase;
-		for (auto const& item: m_storage.values)
+		auto it = m_storage.values.begin();
+		while (it != m_storage.values.end())
 			if (!(
-				m_knowledgeBase.knownToBeDifferent(vars->first, item.first) ||
-				m_knowledgeBase.knownToBeEqual(vars->second, item.second)
+				m_knowledgeBase.knownToBeDifferent(vars->first, it->first) ||
+				m_knowledgeBase.knownToBeEqual(vars->second, it->second)
 			))
-				keysToErase.insert(item.first);
-		for (YulString const& key: keysToErase)
-			m_storage.eraseKey(key);
+				it = m_storage.values.erase(it);
+			else
+				++it;
 		m_storage.set(vars->first, vars->second);
 	}
 	else if (auto vars = isSimpleStore(StoreLoadLocation::Memory, _statement))
 	{
 		ASTModifier::operator()(_statement);
-		set<YulString> keysToErase;
-		for (auto const& item: m_memory.values)
-			if (!m_knowledgeBase.knownToBeDifferentByAtLeast32(vars->first, item.first))
-				keysToErase.insert(item.first);
-		for (YulString const& key: keysToErase)
-			m_memory.eraseKey(key);
+		auto it = m_memory.values.begin();
+		while (it != m_memory.values.end())
+			if (!m_knowledgeBase.knownToBeDifferentByAtLeast32(vars->first, it->first))
+				it = m_memory.values.erase(it);
+			else
+				++it;
 		m_memory.set(vars->first, vars->second);
 	}
 	else
