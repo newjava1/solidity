@@ -92,8 +92,8 @@ void CommonSubexpressionEliminator::visit(Expression& _e)
 			if (holds_alternative<Identifier>(*m_value.at(name).value))
 			{
 				YulString value = std::get<Identifier>(*m_value.at(name).value).name;
-				assertThrow(inScope(value), OptimizerException, "");
-				_e = Identifier{locationOf(_e), value};
+				if (inScope(value))
+					_e = Identifier{locationOf(_e), value};
 			}
 		}
 	}
@@ -105,9 +105,11 @@ void CommonSubexpressionEliminator::visit(Expression& _e)
 			assertThrow(value.value, OptimizerException, "");
 			if (SyntacticallyEqual{}(_e, *value.value))
 			{
-				assertThrow(inScope(variable), OptimizerException, "");
-				_e = Identifier{locationOf(_e), variable};
-				break;
+				if (inScope(variable))
+				{
+					_e = Identifier{locationOf(_e), variable};
+					break;
+				}
 			}
 		}
 	}
