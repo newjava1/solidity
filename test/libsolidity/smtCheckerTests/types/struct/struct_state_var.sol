@@ -13,4 +13,4 @@ contract C {
 	}
 }
 // ----
-// Warning 6328: (148-172): CHC: Assertion violation happens here.
+// Warning 6328: (148-172): CHC: Assertion violation happens here.\nCounterexample:\n\n_x = 7720\n\n\nTransaction trace:\nconstructor()\nf(7720)

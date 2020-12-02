@@ -21,5 +21,5 @@ contract C {
 	}
 }
 // ----
-// Warning 2529: (121-130): CHC: Empty array "pop" happens here.
-// Warning 6328: (230-254): CHC: Assertion violation happens here.
+// Warning 2529: (121-130): CHC: Empty array "pop" happens here.\nCounterexample:\n\n_x = 0\n\n\nTransaction trace:\nconstructor()\nf(0)
+// Warning 6328: (230-254): CHC: Assertion violation happens here.\nCounterexample:\n\n_x = 7720\n\n\nTransaction trace:\nconstructor()\nf(7720)

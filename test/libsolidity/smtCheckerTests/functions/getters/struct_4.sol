@@ -19,4 +19,4 @@ contract C {
 }
 // ----
 // Warning 2072: (179-216): Unused local variable.
-// Warning 6328: (267-302): CHC: Assertion violation happens here.
+// Warning 6328: (267-302): CHC: Assertion violation happens here.\nCounterexample:\n\n\n\n\nTransaction trace:\nconstructor()\ntest()

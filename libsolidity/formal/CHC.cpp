@@ -1382,8 +1382,7 @@ void CHC::checkAndReportTarget(
 			m_errorReporter.warning(
 				_errorReporterId,
 				location,
-				"CHC: " + _satMsg,
-				SecondarySourceLocation().append("Counterexample:\n" + *cex, SourceLocation{})
+				"CHC: " + _satMsg + "\nCounterexample:\n" + *cex
 			);
 		else
 			m_errorReporter.warning(

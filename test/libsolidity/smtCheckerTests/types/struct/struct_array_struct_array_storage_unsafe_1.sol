@@ -26,8 +26,8 @@ contract C {
 	}
 }
 // ----
-// Warning 6328: (181-198): CHC: Assertion violation happens here.
-// Warning 6328: (216-235): CHC: Assertion violation happens here.
-// Warning 6328: (254-274): CHC: Assertion violation happens here.
-// Warning 6328: (296-319): CHC: Assertion violation happens here.
-// Warning 6328: (344-370): CHC: Assertion violation happens here.
+// Warning 6328: (181-198): CHC: Assertion violation happens here.\nCounterexample:\n\n\n\n\nTransaction trace:\nconstructor()\nf()
+// Warning 6328: (216-235): CHC: Assertion violation happens here.\nCounterexample:\n\n\n\n\nTransaction trace:\nconstructor()\nf()
+// Warning 6328: (254-274): CHC: Assertion violation happens here.\nCounterexample:\n\n\n\n\nTransaction trace:\nconstructor()\nf()
+// Warning 6328: (296-319): CHC: Assertion violation happens here.\nCounterexample:\n\n\n\n\nTransaction trace:\nconstructor()\nf()
+// Warning 6328: (344-370): CHC: Assertion violation happens here.\nCounterexample:\n\n\n\n\nTransaction trace:\nconstructor()\nf()
