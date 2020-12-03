@@ -1687,15 +1687,17 @@ string YulUtilFunctions::copyByteArrayToStorageFunction(ArrayType const& _fromTy
 
 string YulUtilFunctions::copyValueArrayStorageToStorageFunction(ArrayType const& _fromType, ArrayType const& _toType)
 {
-	solAssert(
-		*_fromType.copyForLocation(_toType.location(), _toType.isPointer()) == dynamic_cast<ReferenceType const&>(_toType),
-		""
-	);
+	solAssert(_fromType.baseType()->isValueType(), "");
+	solAssert(_toType.baseType()->isValueType(), "");
+	solAssert(_fromType.baseType()->isImplicitlyConvertibleTo(*_toType.baseType()), "");
+
 	solAssert(!_fromType.isByteArray(), "");
+	solAssert(!_toType.isByteArray(), "");
 	solAssert(_fromType.dataStoredIn(DataLocation::Storage) && _toType.baseType()->isValueType(), "");
 	solAssert(_toType.dataStoredIn(DataLocation::Storage), "");
 
-	solUnimplementedAssert(_fromType.storageStride() == _toType.storageStride(), "");
+	solAssert(_fromType.storageStride() <= _toType.storageStride(), "");
+	solAssert(_toType.storageStride() <= 32, "");
 
 	string functionName = "copy_array_to_storage_from_" + _fromType.identifier() + "_to_" + _toType.identifier();
 	return m_functionCollector.createFunction(functionName, [&](){
@@ -1707,18 +1709,44 @@ string YulUtilFunctions::copyValueArrayStorageToStorageFunction(ArrayType const&
 				if gt(length, 0xffffffffffffffff) { <panic>() }
 				<resizeArray>(dst, length)
 
-				let srcPtr := <srcDataLocation>(src)
-
-				let dstPtr := <dstDataLocation>(dst)
+				let srcSlot := <srcDataLocation>(src)
+				let dstSlot := <dstDataLocation>(dst)
 
 				let fullSlots := div(length, <itemsPerSlot>)
-				let i := 0
-				for { } lt(i, fullSlots) { i := add(i, 1) } {
-					sstore(add(dstPtr, i), <maskFull>(sload(add(srcPtr, i))))
-				}
-				let spill := sub(length, mul(i, <itemsPerSlot>))
+				let spill := sub(length, mul(fullSlots, <itemsPerSlot>))
+				let totalSlots := fullSlots
 				if gt(spill, 0) {
-					sstore(add(dstPtr, i), <maskBytes>(sload(add(srcPtr, i)), mul(spill, <bytesPerItem>)))
+					totalSlots := add(totalSlots, 1)
+				}
+
+				let srcSlotValue := sload(srcSlot)
+				let srcItemIndexInSlot := 0
+
+				for { let i := 0 } lt(i, totalSlots) { i := add(i, 1) } {
+					let dstSlotValue := 0
+					let itemsInSlot := <itemsPerSlot>
+					if eq(i, fullSlots) { itemsInSlot := spill }
+					for { let j := 0 } lt(j, itemsInSlot) { j := add(j, 1) } {
+						let itemValue := <convert>(
+							<extractFromSlot>(srcSlotValue, mul(<srcStride>, srcItemIndexInSlot))
+						)
+						itemValue := <prepareStore>(itemValue)
+						dstSlotValue := <updateByteSlice>(dstSlotValue, mul(<dstStride>, j), itemValue)
+
+						<?srcMultiItemsInSlot>
+							srcItemIndexInSlot := add(srcItemIndexInSlot, 1)
+							if eq(srcItemIndexInSlot, <srcItemsPerSlot>) {
+								// here we are done with this slot, we need to read next one
+								srcSlot := add(srcSlot, 1)
+								srcSlotValue := sload(srcSlot)
+								srcItemIndexInSlot := 0
+							}
+						<!srcMultiItemsInSlot>
+							srcSlot := add(srcSlot, 1)
+							srcSlotValue := sload(srcSlot)
+						</srcMultiItemsInSlot>
+					}
+					sstore(add(dstSlot, i), dstSlotValue)
 				}
 			}
 		)");
@@ -1732,9 +1760,14 @@ string YulUtilFunctions::copyValueArrayStorageToStorageFunction(ArrayType const&
 		templ("dstDataLocation", arrayDataAreaFunction(_toType));
 		unsigned itemsPerSlot = 32 / _toType.storageStride();
 		templ("itemsPerSlot", to_string(itemsPerSlot));
-		templ("bytesPerItem", to_string(_toType.storageStride()));
-		templ("maskFull", maskLowerOrderBytesFunction(itemsPerSlot * _toType.storageStride()));
-		templ("maskBytes", maskLowerOrderBytesFunctionDynamic());
+		templ("dstStride", to_string(_toType.storageStride()));
+		templ("srcStride", to_string(_fromType.storageStride()));
+		templ("extractFromSlot", extractFromStorageValueDynamic(*_fromType.baseType()));
+		templ("updateByteSlice", updateByteSliceFunctionDynamic(_toType.storageStride()));
+		templ("convert", conversionFunction(*_fromType.baseType(), *_toType.baseType()));
+		templ("prepareStore", prepareStoreFunction(*_toType.baseType()));
+		templ("srcMultiItemsInSlot", _fromType.storageStride() <= 16);
+		templ("srcItemsPerSlot", to_string(32 / _fromType.storageStride()));
 
 		return templ.render();
 	});
