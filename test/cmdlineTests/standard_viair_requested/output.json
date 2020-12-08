@@ -133,7 +133,7 @@ object \"D_14\" {
                 if iszero(expr_10_address) { revert_forward_1() }
 
                 releaseTemporaryMemory()
-                let vloc_c_7_address := expr_10_address
+                let var_c_7_address := expr_10_address
 
             }
 
