@@ -25,7 +25,7 @@
 using namespace solidity::frontend::test;
 using namespace std;
 
-// Protoype.
+// Prototype.
 extern "C" int LLVMFuzzerTestOneInput(uint8_t const* _data, size_t _size);
 
 extern "C" int LLVMFuzzerTestOneInput(uint8_t const* _data, size_t _size)

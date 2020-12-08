@@ -20,6 +20,9 @@
 
 using namespace std;
 
+// Prototype.
+extern "C" int LLVMFuzzerTestOneInput(uint8_t const* _data, size_t _size);
+
 extern "C" int LLVMFuzzerTestOneInput(uint8_t const* _data, size_t _size)
 {
 	if (_size <= 250)
