@@ -10,7 +10,6 @@ add_dependencies(ossfuzz
         strictasm_assembly_ossfuzz
 )
 
-
 if (OSSFUZZ)
     add_custom_target(ossfuzz_proto)
     add_dependencies(ossfuzz_proto
@@ -68,14 +67,17 @@ if (OSSFUZZ)
     add_executable(strictasm_diff_ossfuzz strictasm_diff_ossfuzz.cpp yulFuzzerCommon.cpp)
     target_link_libraries(strictasm_diff_ossfuzz PRIVATE libsolc evmasm yulInterpreter)
     set_target_properties(strictasm_diff_ossfuzz PROPERTIES LINK_FLAGS ${LIB_FUZZING_ENGINE})
+    target_compile_options(strictasm_diff_ossfuzz PUBLIC ${COMPILE_OPTIONS} -Wno-missing-declarations)
 
     add_executable(strictasm_opt_ossfuzz strictasm_opt_ossfuzz.cpp)
     target_link_libraries(strictasm_opt_ossfuzz PRIVATE yul)
     set_target_properties(strictasm_opt_ossfuzz PROPERTIES LINK_FLAGS ${LIB_FUZZING_ENGINE})
+    target_compile_options(strictasm_opt_ossfuzz PUBLIC ${COMPILE_OPTIONS} -Wno-missing-declarations)
 
     add_executable(strictasm_assembly_ossfuzz strictasm_assembly_ossfuzz.cpp)
     target_link_libraries(strictasm_assembly_ossfuzz PRIVATE yul)
     set_target_properties(strictasm_assembly_ossfuzz PROPERTIES LINK_FLAGS ${LIB_FUZZING_ENGINE})
+    target_compile_options(strictasm_assembly_ossfuzz PUBLIC ${COMPILE_OPTIONS} -Wno-missing-declarations)
 
     add_executable(yul_proto_ossfuzz yulProtoFuzzer.cpp protoToYul.cpp yulProto.pb.cc)
     target_include_directories(yul_proto_ossfuzz PRIVATE /usr/include/libprotobuf-mutator)
