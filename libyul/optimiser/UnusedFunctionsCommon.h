@@ -48,7 +48,7 @@ std::vector<T> filter(std::vector<T> const& _vec, std::vector<bool> const& _mask
 
 /// Returns true if applying UnusedFunctionParameterPruner is not helpful or redundant because the
 /// inliner will be able to handle it anyway.
-bool tooSimpleToBePruned(FunctionDefinition const& _f)
+inline bool tooSimpleToBePruned(FunctionDefinition const& _f)
 {
 	return _f.body.statements.size() <= 1 && CodeSize::codeSize(_f.body) <= 1;
 }
@@ -59,45 +59,6 @@ FunctionDefinition createLinkingFunction(
 	YulString const& _originalFunctionName,
 	YulString const& _linkingFunctionName,
 	NameDispenser& _nameDispenser
-)
-{
-	auto generateTypedName = [&](TypedName t)
-	{
-		return TypedName{
-			t.location,
-			_nameDispenser.newName(t.name),
-			t.type
-		};
-	};
-
-	langutil::SourceLocation loc = _original.location;
-
-	FunctionDefinition linkingFunction{
-		loc,
-		_linkingFunctionName,
-		util::applyMap(_original.parameters, generateTypedName),
-		util::applyMap(_original.returnVariables, generateTypedName),
-		{loc, {}} // body
-	};
-
-	FunctionCall call{loc, Identifier{loc, _originalFunctionName}, {}};
-	for (auto const& p: filter(linkingFunction.parameters, _usedParametersAndReturns.first))
-		call.arguments.emplace_back(Identifier{loc, p.name});
-
-	Assignment assignment{loc, {}, nullptr};
-
-	for (auto const& r: filter(linkingFunction.returnVariables, _usedParametersAndReturns.second))
-		assignment.variableNames.emplace_back(Identifier{loc, r.name});
-
-	if (assignment.variableNames.empty())
-		linkingFunction.body.statements.emplace_back(ExpressionStatement{loc, std::move(call)});
-	else
-	{
-		assignment.value = std::make_unique<Expression>(std::move(call));
-		linkingFunction.body.statements.emplace_back(std::move(assignment));
-	}
-
-	return linkingFunction;
-}
+);
 
 }
