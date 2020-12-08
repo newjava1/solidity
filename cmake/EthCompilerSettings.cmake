@@ -53,6 +53,8 @@ if (("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU") OR ("${CMAKE_CXX_COMPILER_ID}" MA
 	add_compile_options(-Wimplicit-fallthrough)
 	add_compile_options(-Wsign-conversion)
 	add_compile_options(-Wconversion)
+	add_compile_options(-Wcast-qual)
+	add_compile_options(-Wcast-align)
 
 	eth_add_cxx_compiler_flag_if_supported(
 		$<$<COMPILE_LANGUAGE:CXX>:-Wextra-semi>
@@ -65,6 +67,7 @@ if (("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU") OR ("${CMAKE_CXX_COMPILER_ID}" MA
 	eth_add_cxx_compiler_flag_if_supported(-Wduplicate-enum)
 	eth_add_cxx_compiler_flag_if_supported(-Wlogical-op)
 	eth_add_cxx_compiler_flag_if_supported(-Wno-unknown-attributes)
+	eth_add_cxx_compiler_flag_if_supported(-Wcast-align=strict)
 
 	# Configuration-specific compiler settings.
 	set(CMAKE_CXX_FLAGS_DEBUG          "-O0 -g3 -DETH_DEBUG")
