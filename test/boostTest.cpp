@@ -148,6 +148,9 @@ void initializeOptions()
 }
 }
 
+// TODO: Prototype -- why is this needed?
+test_suite* init_unit_test_suite( int /*argc*/, char* /*argv*/[] );
+
 test_suite* init_unit_test_suite( int /*argc*/, char* /*argv*/[] )
 {
 	master_test_suite_t& master = framework::master_test_suite();
