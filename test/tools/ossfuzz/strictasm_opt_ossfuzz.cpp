@@ -24,6 +24,8 @@ using namespace solidity::util;
 using namespace solidity::yul;
 using namespace std;
 
+extern "C" int LLVMFuzzerTestOneInput(uint8_t const* _data, size_t _size);
+
 extern "C" int LLVMFuzzerTestOneInput(uint8_t const* _data, size_t _size)
 {
 	if (_size > 600)
