@@ -58,18 +58,8 @@ bool Z3Loader::available() const
 
 Z3Loader::Z3Loader()
 {
-	vector<unsigned> versionParts{Z3_MAJOR_VERSION, Z3_MINOR_VERSION, Z3_BUILD_NUMBER, Z3_REVISION_NUMBER};
-	string basename{"libz3.so"};
-	while (!m_handle && !versionParts.empty())
-	{
-		string name = basename;
-		for (unsigned part: versionParts)
-			name += "." + to_string(part);
-		m_handle = dlmopen(LM_ID_NEWLM, name.c_str(), RTLD_NOW);
-		versionParts.pop_back();
-	}
-	if (!m_handle)
-		m_handle = dlmopen(LM_ID_NEWLM, basename.c_str(), RTLD_NOW);
+	string libname{"libz3.so." + to_string(Z3_MAJOR_VERSION) + "." + to_string(Z3_MINOR_VERSION)};
+	m_handle = dlmopen(LM_ID_NEWLM, libname.c_str(), RTLD_NOW);
 }
 
 Z3Loader::~Z3Loader()
