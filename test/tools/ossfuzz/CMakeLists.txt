@@ -98,7 +98,7 @@ if (OSSFUZZ)
             protobuf.a
     )
     set_target_properties(yul_proto_diff_ossfuzz PROPERTIES LINK_FLAGS ${LIB_FUZZING_ENGINE})
-    target_compile_options(yul_proto_diff_ossfuzz PUBLIC ${COMPILE_OPTIONS} -Wno-sign-conversion -Wsuggest-destructor-override)
+    target_compile_options(yul_proto_diff_ossfuzz PUBLIC ${COMPILE_OPTIONS} -Wno-sign-conversion -Wno-suggest-destructor-override)
 
     add_executable(yul_proto_diff_custom_mutate_ossfuzz
             yulProto_diff_ossfuzz.cpp
