@@ -13,6 +13,7 @@ Compiler Features:
  * SMTChecker: Support getters.
  * SMTChecker: Support early returns in the CHC engine.
  * SMTChecker: Report struct values in counterexamples from CHC engine.
+ * Standard-Json: Move the recently introduced ``modelCheckerSettings`` key to ``settings.modelChecker``.
  * Standard-Json: Properly filter the requested output artifacts.
 
 Bugfixes:
