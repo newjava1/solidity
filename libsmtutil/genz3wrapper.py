@@ -50,13 +50,15 @@ print(r"""// This file is auto-generated from genz3wrapper.py
 #include <tuple>
 #include <z3.h>
 
-namespace {
+namespace
+{
 
 template<typename T>
 struct FunctionTrait;
 
 template<typename R, typename... Args>
-struct FunctionTrait<R(*)(Args...)> {
+struct FunctionTrait<R(*)(Args...)>
+{
     using ResultType = R;
     template<unsigned N>
     using ArgType = std::tuple_element_t<N, std::tuple<Args...>>;
@@ -70,7 +72,8 @@ using ArgType = typename FunctionTrait<decltype(F)>::template ArgType<N>;
 
 }
 
-extern "C" {
+extern "C"
+{
 
 void Z3_API Z3_set_error_handler(Z3_context c, Z3_error_handler h)
 {

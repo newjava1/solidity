@@ -34,6 +34,7 @@ Z3Loader const& Z3Loader::get()
 	static Z3Loader z3;
 	return z3;
 }
+
 void* Z3Loader::loadSymbol(char const* _name) const
 {
 	using namespace solidity::smtutil;
@@ -70,6 +71,7 @@ Z3Loader::Z3Loader()
 	if (!m_handle)
 		m_handle = dlmopen(LM_ID_NEWLM, basename.c_str(), RTLD_NOW);
 }
+
 Z3Loader::~Z3Loader()
 {
 	if (m_handle)
