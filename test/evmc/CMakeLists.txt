@@ -5,6 +5,7 @@
 
 add_library(evmc_loader STATIC loader.h loader.c)
 set_target_properties(evmc_loader PROPERTIES LINKER_LANGUAGE C)
+target_compile_options(evmc_loader PUBLIC ${COMPILE_OPTIONS} -Wno-cast-align -Wno-cast-qual)
 target_link_libraries(evmc_loader INTERFACE ${CMAKE_DL_LIBS})
 target_include_directories(evmc_loader PUBLIC ${PROJECT_SOURCE_DIR}/test/)
 set_target_properties(evmc_loader PROPERTIES
