@@ -34,6 +34,10 @@
 
 #include <boost/range/adaptor/reversed.hpp>
 
+#ifdef HAVE_Z3_DLOPEN
+#include <z3_version.h>
+#endif
+
 #include <queue>
 
 using namespace std;
@@ -94,7 +98,7 @@ void CHC::analyze(SourceUnit const& _source)
 			3996_error,
 			SourceLocation(),
 #ifdef HAVE_Z3_DLOPEN
-			"CHC analysis was not possible since no suitable version of libz3.so was found."
+			"CHC analysis was not possible since libz3.so." + to_string(Z3_MAJOR_VERSION) + "." + to_string(Z3_MINOR_VERSION) + " was not found."
 #else
 			"CHC analysis was not possible since no integrated z3 SMT solver was found."
 #endif
