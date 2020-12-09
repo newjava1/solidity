@@ -52,7 +52,7 @@ bool Z3Loader::available() const
 	unsigned build = 0;
 	unsigned rev = 0;
 	Z3_get_version(&major, &minor, &build, &rev);
-	return major == 4 && minor >= 6;
+	return major == Z3_MAJOR_VERSION && minor == Z3_MINOR_VERSION;
 }
 
 Z3Loader::Z3Loader()
